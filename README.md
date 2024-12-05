@@ -83,8 +83,6 @@ JSON Web Token (JWT) решает множество задач, связанн�
 Если токен попадает в руки злоумышленника, он может быть использован до истечения срока действия.
 JWT особенно эффективен в микросервисах, API-ориентированных приложениях и системах с масштабируемой архитектурой.
 
-## закоментить код; наверное, можно разбить куски кода:
-## создание класса; его характеристики; описание структуры, что делается
 
 ## Реализации работы с JWT
 Рассмотрим, как можно реализовать работу с токенами в виде удобного класса.
@@ -282,7 +280,6 @@ __Если рассматривать возможность аутентифи�
 __Проблема:__ Поскольку __refresh token__ продлевает срок своей жизни каждый раз при рефреше токенов >> хакер пользуется токенами до тех пор пока юзер не залогинится.
 
 ### Чтиво:
-- Заметка базируется на: https://habrahabr.ru/company/Voximplant/blog/323160/
 - https://tools.ietf.org/html/rfc6749
 - https://www.digitalocean.com/community/tutorials/oauth-2-ru
 - https://jwt.io/introduction/
@@ -290,9 +287,6 @@ __Проблема:__ Поскольку __refresh token__ продлевает 
 - https://auth0.com/blog/cookies-vs-tokens-definitive-guide/
 - https://auth0.com/blog/ten-things-you-should-know-about-tokens-and-cookies/
 - https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
-- https://habr.com/company/dataart/blog/262817/
-- https://habr.com/post/340146/
-- https://habr.com/company/mailru/blog/115163/
 - https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
 - https://www.youtube.com/watch?v=Ngh3KZcGNaU
 - https://www.youtube.com/playlist?list=PLvTBThJr861y60LQrUGpJNPu3Nt2EeQsP
@@ -306,4 +300,3 @@ __Проблема:__ Поскольку __refresh token__ продлевает 
 - https://medium.com/@cjainn/anatomy-of-a-jwt-token-part-1-8f7616113c14
 - https://medium.com/@cjainn/anatomy-of-a-jwt-token-part-2-c12888abc1a2
 - https://scotch.io/bar-talk/why-jwts-suck-as-session-tokens
-- https://t.me/why_jwt_is_bad
