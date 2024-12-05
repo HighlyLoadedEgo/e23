@@ -94,86 +94,110 @@ class JWTManager:
         self._jwt_config = jwt_config
 
     def create_token_pair(self, subject: UserSubject) -> TokensData:
-        """Function to create jwt pair."""
-        access_token = self._create_access_token(subject=subject)
-        refresh_token = self._create_refresh_token(subject=subject)
-
-        return TokensData(access_token=access_token, refresh_token=refresh_token)
+        ...
 
     def refresh_tokens(self, refresh_token: str) -> str:
-        """Refresh token and get new access token."""
-        payload = self.decode_token(
-            token=refresh_token, secret_key=self._jwt_config.REFRESH_SECRET
-        )
-        return self.create_token_pair(subject=UserSubject.model_validate(payload))
+        ...
 
     def decode_token(
         self, token: str, secret_key: str | None = None
     ) -> UserTokenPayload:
-        """Decodes a JWT token to extract the payload."""
-        if not secret_key:
-            secret_key = self._jwt_config.ACCESS_SECRET
-        try:
-            payload = jwt.decode(
-                token,
-                secret_key,
-                algorithms=[self._jwt_config.ALGORITHM],
-            )
-        except ExpiredSignatureError:
-            raise TokenExpiredError()
-        except JWTError as err:
-            raise InvalidTokenError() from err
-
-        return UserTokenPayload(**payload)
+        ...
 
     def _create_access_token(self, subject: UserSubject) -> str:
-        """Creates an access token for a given user."""
-        access_token = self._create_jwt_token(
-            subject=subject,
-            expire_minutes=self._jwt_config.ACCESS_TOKEN_EXPIRE_MINUTES,
-            secret_key=self._jwt_config.ACCESS_SECRET,
-        )
-
-        return access_token
+        ...
 
     def _create_refresh_token(self, subject: UserSubject) -> str:
-        """Creates a refresh token for a given user."""
-        access_token = self._create_jwt_token(
-            subject=subject,
-            expire_minutes=self._jwt_config.REFRESH_TOKEN_EXPIRE_MINUTES,
-            secret_key=self._jwt_config.REFRESH_SECRET,
-        )
-
-        return access_token
+        ...
 
     def _create_jwt_token(
         self, subject: UserSubject, expire_minutes: int, secret_key: str
     ) -> str:
-        """Function to create jwt token."""
-        iat = datetime.datetime.now(datetime.UTC)
-        expires_delta = iat + datetime.timedelta(minutes=expire_minutes)
-
-        payload = {
-            "iat": iat,
-            "exp": expires_delta,
-            "id": str(subject.id),
-        }
-
-        return jwt.encode(payload, secret_key, algorithm=self._jwt_config.ALGORITHM)
+        ...
 ```
 Класс JWTManager предоставляет функционал для работы с JWT и содержит следующие основные методы:
 
 1. create_token_pair: Генерирует пару токенов (access и refresh) для указанного пользователя. Access-токен предназначен для краткосрочного использования, а refresh-токен — для получения новых токенов.
-
+```python
+def create_token_pair(self, subject: UserSubject) -> TokensData:
+   """Function to create jwt pair."""
+   access_token = self._create_access_token(subject=subject)
+   refresh_token = self._create_refresh_token(subject=subject)
+   
+   return TokensData(access_token=access_token, refresh_token=refresh_token)
+```
 2. refresh_tokens: Обновляет токены на основе переданного refresh-токена. Если токен валиден, создается новая пара токенов.
-
+```python
+def refresh_tokens(self, refresh_token: str) -> str:
+   """Refresh token and get new access token."""
+   payload = self.decode_token(
+      token=refresh_token, secret_key=self._jwt_config.REFRESH_SECRET
+   )
+   return self.create_token_pair(subject=UserSubject.model_validate(payload))
+```
 3. decode_token: Декодирует токен и извлекает из него полезную нагрузку (payload). Метод использует переданный секретный ключ и алгоритм шифрования, определённый в конфигурации.
-
+```python
+def decode_token(
+   self, token: str, secret_key: str | None = None
+) -> UserTokenPayload:
+   """Decodes a JWT token to extract the payload."""
+   if not secret_key:
+      secret_key = self._jwt_config.ACCESS_SECRET
+   try:
+      payload = jwt.decode(
+          token,
+          secret_key,
+          algorithms=[self._jwt_config.ALGORITHM],
+      )
+   except ExpiredSignatureError:
+      raise TokenExpiredError()
+   except JWTError as err:
+      raise InvalidTokenError() from err
+   
+   return UserTokenPayload(**payload)
+```
 4. Приватные методы для создания токенов:
    1. _create_access_token: Создает access-токен.
+   ```python
+   def _create_access_token(self, subject: UserSubject) -> str:
+      """Creates an access token for a given user."""
+      access_token = self._create_jwt_token(
+         subject=subject,
+         expire_minutes=self._jwt_config.ACCESS_TOKEN_EXPIRE_MINUTES,
+         secret_key=self._jwt_config.ACCESS_SECRET,
+      )
+      
+      return access_token   
+   ```
    2. _create_refresh_token: Создает refresh-токен.
+   ```python
+   def _create_refresh_token(self, subject: UserSubject) -> str:
+      """Creates a refresh token for a given user."""
+      access_token = self._create_jwt_token(
+         subject=subject,
+         expire_minutes=self._jwt_config.REFRESH_TOKEN_EXPIRE_MINUTES,
+         secret_key=self._jwt_config.REFRESH_SECRET,
+      )
+      
+      return access_token
+   ```
    3. _create_jwt_token: Генерирует JWT с определенным временем истечения, полезной нагрузкой и ключом шифрования.
-
+   ```python
+   def _create_jwt_token(
+      self, subject: UserSubject, expire_minutes: int, secret_key: str
+   ) -> str:
+      """Function to create jwt token."""
+      iat = datetime.datetime.now(datetime.UTC)
+      expires_delta = iat + datetime.timedelta(minutes=expire_minutes)
+      
+      payload = {
+         "iat": iat,
+         "exp": expires_delta,
+         "id": str(subject.id),
+      }
+      
+      return jwt.encode(payload, secret_key, algorithm=self._jwt_config.ALGORITHM)
+   ```
 Методика работы основана на конфигурации, передаваемой через объект AuthConfig, что обеспечивает гибкость настройки (например, время истечения токенов, ключи шифрования).
 
 ## Схема создания/использования токенов (api/auth/login):
